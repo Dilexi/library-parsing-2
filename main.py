@@ -20,7 +20,7 @@ def download_txt(url, number, filename, folder='books/'):
     response = requests.get(url, params=params)
     response.raise_for_status() 
     check_for_redirect(response)
-    filepath = os.path.join(f'{folder}{sanitize_filename(filename)}.txt')
+    filepath = os.path.join(folder, f'{sanitize_filename(filename)}.txt')
     with open(filepath, 'wb') as file:
         file.write(response.content)
 
@@ -97,6 +97,11 @@ def main():
         default="media"
     )
     args = parser.parse_args()
+    imgs_dir = f"./{args.dest_folder}/images"
+    books_dir = f"./{args.dest_folder}/books"
+
+    os.makedirs(imgs_dir, exist_ok=True)
+    os.makedirs(books_dir, exist_ok=True)
 
     all_books_parameters = []
     
@@ -108,12 +113,12 @@ def main():
             book_parameters = parse_book_page(response, category_url)
             all_books_parameters.append(book_parameters)
             if not args.skip_imgs:
-                download_image(book_parameters['image_url'])
+                download_image(book_parameters['image_url'], folder=imgs_dir)
             book_title = book_parameters['title']
             filename = f'{number}. {book_title.strip()}'
             url_txt_book = f'https://tululu.org/txt.php'
             if not args.skip_txt:
-                download_txt(url_txt_book, number, filename)
+                download_txt(url_txt_book, number, filename, folder=books_dir)
         except requests.exceptions.HTTPError:
             print('книга не найдена')
         except requests.exceptions.ConnectionError:
