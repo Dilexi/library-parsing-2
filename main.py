@@ -125,8 +125,8 @@ def main():
             print("Повторное подключение к серверу")
             sleep(20)
     book_parameters_json = json.dumps(all_books_parameters, ensure_ascii=False)
-    with open("books.json", "w", encoding='utf8') as my_file:
-        my_file.write(book_parameters_json)
+    with open("books.json", "w", encoding='utf8') as file:
+        file.write(book_parameters_json)
    
 
 if __name__=='__main__':
