@@ -105,12 +105,12 @@ def main():
 
     all_books_parameters = []
     
-    for number, category_url in enumerate(get_category_books_url(args.start_page, args.end_page)):
+    for number, book_url in enumerate(get_category_books_url(args.start_page, args.end_page)):
         try:
-            response = requests.get(category_url)
+            response = requests.get(book_url)
             response.raise_for_status() 
             check_for_redirect(response)
-            book_parameters = parse_book_page(response, category_url)
+            book_parameters = parse_book_page(response, book_url)
             all_books_parameters.append(book_parameters)
             if not args.skip_imgs:
                 download_image(book_parameters['image_url'], folder=imgs_dir)
