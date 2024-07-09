@@ -6,12 +6,8 @@ from time import sleep
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, unquote, urlsplit
+from check_for_redirect import check_for_redirect
 from parse_tululu_category import get_category_book_url
-
-
-def check_for_redirect(response):
-    if response.history:
-        raise requests.exceptions.HTTPError
    
 
 def download_txt(url, number, filename, folder='books/'):

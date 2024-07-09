@@ -2,6 +2,7 @@ import requests
 from time import sleep
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
+from check_for_redirect import check_for_redirect
 
 
 def get_category_book_url(start_page, end_page):
@@ -11,6 +12,7 @@ def get_category_book_url(start_page, end_page):
             tululu_url = f'https://tululu.org/l55/{number_page}'
             response = requests.get(tululu_url)
             response.raise_for_status()
+            check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'lxml')
             books_selector = 'table.d_book'
             books_urls = soup.select(books_selector)
