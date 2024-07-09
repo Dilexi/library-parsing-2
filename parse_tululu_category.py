@@ -14,6 +14,6 @@ def get_category_book_url(start_page, end_page):
         books_urls = soup.select(books_selector)
         for book_url in books_urls:
             url = book_url.find('a')['href']
-            book_full_url = urljoin('https://tululu.org', url)
+            book_full_url = urljoin(tululu_url, url)
             all_full_urls.append(book_full_url)
     return all_full_urls
