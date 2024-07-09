@@ -1,11 +1,13 @@
-import os
-import json
-import requests
 import argparse
+import json
+import os
 from time import sleep
+
+import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, unquote, urlsplit
+
 from check_for_redirect import check_for_redirect
 from parse_tululu_category import get_category_book_url
    
