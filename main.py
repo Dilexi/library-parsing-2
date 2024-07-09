@@ -6,7 +6,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, unquote, urlsplit
-from parse_tululu_category import get_category_books_url
+from parse_tululu_category import get_category_book_url
 
 
 def check_for_redirect(response):
@@ -105,7 +105,7 @@ def main():
 
     all_books_parameters = []
     
-    for number, book_url in enumerate(get_category_books_url(args.start_page, args.end_page)):
+    for number, book_url in enumerate(get_category_book_url(args.start_page, args.end_page)):
         try:
             response = requests.get(book_url)
             response.raise_for_status() 
