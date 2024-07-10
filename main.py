@@ -14,7 +14,7 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def get_category_book_url(start_page, end_page):
+def get_category_book_urls(start_page, end_page):
     all_full_urls = []
     for number_page in range(start_page, end_page):
         try:
@@ -128,7 +128,7 @@ def main():
 
     all_books_parameters = []
     
-    for number, book_url in enumerate(get_category_book_url(args.start_page, args.end_page)):
+    for number, book_url in enumerate(get_category_book_urls(args.start_page, args.end_page)):
         try:
             response = requests.get(book_url)
             response.raise_for_status() 
