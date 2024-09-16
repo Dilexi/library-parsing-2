@@ -16,6 +16,7 @@ def check_for_redirect(response):
 
 def get_category_book_urls(start_page, end_page):
     all_full_urls = []
+    all_numbers_text = []
     for number_page in range(start_page, end_page):
         try:
             tululu_url = f'https://tululu.org/l55/{number_page}'
@@ -28,13 +29,16 @@ def get_category_book_urls(start_page, end_page):
             for book_url in books_urls:
                 url = book_url.find('a')['href']
                 book_full_url = urljoin(tululu_url, url)
+                split_url = urlsplit(url).path.split('/')[1]
                 all_full_urls.append(book_full_url)
+                all_numbers_text.append(split_url)
         except requests.exceptions.HTTPError:
             print('книга не найдена')
         except requests.exceptions.ConnectionError:
             print("Повторное подключение к серверу")
             sleep(20)
-    return all_full_urls
+    return all_full_urls, all_numbers_text
+
 
 
 def download_txt(url, number, filename, folder='books/'):
@@ -127,8 +131,9 @@ def main():
     os.makedirs(books_dir, exist_ok=True)
 
     all_books_parameters = []
-    
-    for number, book_url in enumerate(get_category_book_urls(args.start_page, args.end_page)):
+    book_urls, book_numbers = get_category_book_urls(args.start_page, args.end_page)
+
+    for book_url, number_book in zip(book_urls, book_numbers):
         try:
             response = requests.get(book_url)
             response.raise_for_status() 
@@ -138,10 +143,10 @@ def main():
             if not args.skip_imgs:
                 download_image(book_parameters['image_url'], folder=imgs_dir)
             book_title = book_parameters['title']
-            filename = f'{number}. {book_title.strip()}'
+            filename = f'{book_title.strip()}'
             url_txt_book = f'https://tululu.org/txt.php'
             if not args.skip_txt:
-                download_txt(url_txt_book, number, filename, folder=books_dir)
+                download_txt(url_txt_book, number_book[1:], filename, folder=books_dir)
         except requests.exceptions.HTTPError:
             print('книга не найдена')
         except requests.exceptions.ConnectionError:
